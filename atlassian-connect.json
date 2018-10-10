@@ -1,0 +1,41 @@
+{
+    "key": "taas-mvp",
+    "name": "Taas MVP",
+    "description": "Taas MVP",
+    "vendor": {
+        "name": "Taas Request",
+        "url": "https://www.atlassian.com/XXX"
+    },
+    "baseUrl": "https://3663b405.ngrok.io",
+    "links": {
+        "self": "{{localBaseUrl}}/atlassian-connect.json",
+        "homepage": "{{localBaseUrl}}/atlassian-connect.json"
+    },
+    "authentication": {
+        "type": "jwt"
+    },
+    "lifecycle": {
+        "installed": "/installed"
+    },
+    "scopes": [
+        "READ"
+    ],
+    "modules": {
+        "generalPages": [
+            {
+                "key": "taas-page-jira",
+                "location": "system.top.navigation.bar",
+                "name": {
+                    "value": "Taas"
+                },
+                "url": "/hello-world",
+                "conditions": [{
+                    "condition": "user_is_logged_in"
+                }]
+            }
+        ]
+    },
+    "apiMigrations": {
+        "gdpr": true
+    }
+}
