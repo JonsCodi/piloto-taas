@@ -6,7 +6,7 @@
         "name": "Taas Request",
         "url": "https://www.atlassian.com/XXX"
     },
-    "baseUrl": "https://3663b405.ngrok.io",
+    "baseUrl": "https://32105ba8.ngrok.io",
     "links": {
         "self": "{{localBaseUrl}}/atlassian-connect.json",
         "homepage": "{{localBaseUrl}}/atlassian-connect.json"
