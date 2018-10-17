@@ -17,7 +17,7 @@ AJS.$(function(){
     var key = [];
       AJS.$.ajax({
             type: "GET",
-            url: "https://taasdev.atlassian.net/rest/api/3/search?jql=project=TAS",
+            url: "https://taasdev.atlassian.net/rest/api/3/search?jql=project=TAS+order+by+key",
             async: false,
             headers: {
               'Accept': 'application/json',
@@ -43,12 +43,14 @@ console.log(key)
           }
       }).done(function (data) {
          console.log(data);
-         const link = data.fields.attachment[0].content;
-         const table = '<tr>'+
-                          '<td id="issue-key"><a href="'+key[i]+'">'+key[i]+'</a></td>'+
-                          '<td id="attach"><a href="'+link+'">Resultado do Teste</a></td>'+
-                        '</tr>';
-         AJS.$('table').find('tbody').append(table);
+         if(data.fields.attachment.length > 0){
+           const link = data.fields.attachment[0].content;
+           const table = '<tr>'+
+                            '<td id="issue-key"><a href="'+key[i]+'">'+key[i]+'</a></td>'+
+                            '<td id="attach"><a href="'+link+'">Resultado do Teste</a></td>'+
+                          '</tr>';
+           AJS.$('table').find('tbody').append(table);
+         }
       }).error(function (err) {
          console.log(err);
       });
