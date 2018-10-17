@@ -15,15 +15,30 @@
           <p>
           </p>
           <p>
-
             <label for="repository">Git Repository</label>
             <input type="text" class="text long-field" id="repository"/>
+          </p>
+          <p>
+            <label for="key">Chave da Tarefa</label>
+            <input type="text" class="text long-field" id="key"/>
           </p>
           <p>
             <button class="aui-button aui-button-primary" onclick="POST()">HTTP REQUEST  <span class="aui-icon aui-icon-small aui-iconfont-devtools-arrow-right">Arrow right</span></button>
           </p>
           <p>
             <div id="resp"> </div>
+          </p>
+          <p>
+            <table class="aui">
+                <thead>
+                    <tr>
+                        <th>Issue Key</th>
+                        <th>Attachment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
           </p>
         </div>
       </div>
