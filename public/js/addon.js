@@ -1,75 +1,67 @@
 /* add-on script */
 
 function POST(){
-  var value = AJS.$('#repository');
-  console.log(value[0].value)
- AJS.$.post( "https://putsreq.com/R8rzjAgq25i7uhYBYGbt", { name: value[0].value})
-//  AJS.$.post()
-    .done(function(data) {
-      console.log( data);
-      AJS.$("#resp").append(data);
-      console.log("Done!")
+    var  json='{"parameter": [{"name":"GIT_URL", "value":"https://github.com/olucasfagundes/SvcParametrosRobotTests"}, {"name":"JIRA_ISSUE", "value":"tas-1"}, {"name":"BASE_URL", "value":"https://taasdev.atlassia.net"}, {"name":"TEST_SUITE", "value":"SvcParametrosRobotTests/tests/EndPointCheck.robot"}]}'
+    var urlJenkins = 'https://Admin:11d302e42fd690b4698de815fc53e317c8@GoRobot-752225723.us-east-1.elb.amazonaws.com:8080/job/RobotStart/build';
+    AP.request({
+      url: urlJenkins,
+      type: 'POST',
+      contentType: 'application/json',
+      data: json,
+      success: function(responseText){
+        alert(responseText);
+      }
     });
 }
 
-AJS.$(function(){
-
-    var key = [];
-      // AJS.$.ajax({
-      //       type: "GET",
-      //       url: "https://taasdev.atlassian.net/rest/api/3/search?jql=project=TAS+order+by+key",
-      //       async: false,
-      //       headers: {
-      //         'Accept': 'application/json',
-      //         "Authorization": "Basic " + btoa("username" + ":" + "password")
-      //       }
-      //   }).done(function (data) {
-      //      console.log(data);
-      //      for(var i = 0;i<data.issues.length;i++){
-      //        key.push(data.issues[i].key);
-      //      }
-      //   }).error(function (err) {
-      //      console.log(err);
-      //   });
-setTimeout(function(){
-  var urlGetIssuesByProject = "https://taasdev.atlassian.net/rest/api/3/search?jql=project=TAS+order+by+key";
-  var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState == XMLHttpRequest.DONE) {
-        console.log(xhr)
+function getIssuesFromProject(){
+  var keys = [];
+  var urlProject = '/rest/api/3/search?jql=project=TAS+order+by+key';
+  function onLoadSuccess(responseBody){
+    var json = JSON.parse(responseBody);
+    for(var i = 0;i<json.issues.length;i++){
+      keys.push(json.issues[i].key);
     }
   }
-  xhr.open('GET', urlGetIssuesByProject, false);
-  xhr.withCredentials = true
-  xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.setRequestHeader("Authorization", "Basic " + btoa("username" + ":" + "password"))
-  xhr.send(null);
-}, 4000);
-console.log(key)
-  for(var i = 0;i<key.length;i++){
-    AJS.$.ajax({
-          type: "GET",
-          url: "https://taasdev.atlassian.net/rest/api/3/issue/"+key[i],
-          async: false,
-          headers: {
-            'Accept': 'application/json',
-            "Authorization": "Basic " + btoa("username" + ":" + "password")
-          }
-      }).done(function (data) {
-         console.log(data);
-         if(data.fields.attachment.length > 0){
-           const link = data.fields.attachment[0].content;
-           const table = '<tr>'+
-                            '<td id="issue-key"><a href=https://taasdev.atlassian.net/browse/'+key[i]+' target="_blank">'+key[i]+'</a></td>'+
-                            '<td id="attach"><a href='+link+'>Resultado do Teste</a></td>'+
+
+  AP.require(['request'], function(request){
+    request({
+      url:urlProject,
+      success:onLoadSuccess
+    });
+  });
+  return keys;
+}
+
+function getIssues(keys){
+  var urlRestIssue = '/rest/api/3/issue/';
+  for(var i = 0;i<keys.length;i++){
+    AP.require(['request'], function(request){
+        console.log(keys)
+        request({
+          url:urlRestIssue+keys[i],
+          success:function(responseText){
+            var json = JSON.parse(responseText);
+            console.log(json)
+            const link = json.fields.attachment[0].content;
+            const table = '<tr>'+
+                              '<td id="issue-key"><a href=https://taasdev.atlassian.net/browse/'+json.key+' target="_blank">'+json.key+'</a></td>'+
+                              '<td id="attach"><a href='+link+'>Resultado do Teste</a></td>'+
                           '</tr>';
-           AJS.$('table').find('tbody').append(table);
-         }
-      }).error(function (err) {
-         console.log(err);
-      });
+            AJS.$('table').find('tbody').append(table);
+          },
+          error: function(xhr, statusText, errorThrown){
+            console.log(errorThrown);
+          }
+        });
+    });
   }
+}
 
-
+AJS.$(function(){
+  var keys = getIssuesFromProject();
+  setTimeout(function(){
+      getIssues(keys);
+  }, 5000);
     console.log("Addon.js Finished!!!");
 });
