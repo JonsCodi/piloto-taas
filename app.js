@@ -10,6 +10,7 @@ var cookieParser = require('cookie-parser');
 var errorHandler = require('errorhandler');
 var morgan = require('morgan');
 var request = require("request");
+var curl = require('curlrequest');
 // You need to load `atlassian-connect-express` to use her godly powers
 var ac = require('atlassian-connect-express');
 // Static expiry middleware to help serve static resources efficiently

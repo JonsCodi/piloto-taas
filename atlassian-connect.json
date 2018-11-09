@@ -6,7 +6,7 @@
         "name": "Taas Request",
         "url": "https://www.atlassian.com/XXX"
     },
-    "baseUrl": "https://5b1ac537.ngrok.io",
+    "baseUrl": "https://072fe2ba.ngrok.io",
     "scopes": [
             "read", "write"
         ],
@@ -20,9 +20,6 @@
     "lifecycle": {
         "installed": "/installed"
     },
-    "scopes": [
-        "read"
-    ],
     "modules": {
         "generalPages": [
             {
